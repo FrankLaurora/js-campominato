@@ -53,12 +53,15 @@
     height: 100px;
     border: 1px solid #000;
     background-color: #808080;
+    cursor: pointer;
 }
 
 .square.safe {
     background-color: #32aa32;
+    cursor: default;
 }
 
 .square.unsafe {
     background-color: #8b0303;
+    cursor: default;
 }

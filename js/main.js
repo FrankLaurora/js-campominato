@@ -1,5 +1,6 @@
 var btnPlay = document.getElementById("play");
 var playground = document.getElementById("playground");
+var boxNumber = Number;
 
 function battlefield(num) {
     for (var i = 1; i <= num; i++) {
@@ -26,6 +27,7 @@ var clickedBox = playground.addEventListener("click",
     function(clicked) {
         let checkedBoxNum = parseInt(clicked.target.innerHTML);
         let checkedBox = clicked.target;
+        //con la funzione probe controllo che la casella sia minata o meno
         probe(bombs, checkedBoxNum, checkedBox);
     }
 );
@@ -35,8 +37,12 @@ var safeBoxes = []; /* qui verranno aggiunti, senza ripetizioni, i numeri conten
 //genero una funzione che verifichi la presenza di checkedBoxNum in bombs e aggiunga checkedBoxNum a safeBoxes se non è presente. Se checkedBoxNum è presente in bombs la funzione genera un alert e restituisce il punteggio (la lunghezza di safeBoxes). Inoltre, cambio il colore alla casella indicata dall'argomento tag.
 function probe(arr, elem, tag) {
     if(!arr.includes(elem)){
-        if(!safeBoxes.includes(elem)) {
+        if(!safeBoxes.includes(elem) && safeBoxes.length != (boxNumber - bombs.length - 1)) {
             tag.classList.add("safe");
+            return safeBoxes.push(elem);
+        } else if(!safeBoxes.includes(elem) && safeBoxes.length == (boxNumber - bombs.length - 1)) {
+            tag.classList.add("safe");
+            alert("Hai vinto! Hai evitato tutte le mine! Il tuo punteggio è " + (safeBoxes.length + 1) + ".");
             return safeBoxes.push(elem);
         }
     } else {
@@ -62,7 +68,7 @@ btnPlay.addEventListener("click",
             return alert("Attenzione! Devi inserire un numero compreso da 2 a 10 per righe e colonne!");
         } else {
             //calcolo il numero di caselle moltiplicando righe per colonne
-            var boxNumber = rows * columns;
+             boxNumber = rows * columns;
 
             //creo il campo di gioco
             battlefield(boxNumber);

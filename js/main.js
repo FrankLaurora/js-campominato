@@ -1,9 +1,9 @@
 var btnPlay = document.getElementById("play"); /* accede al tasto gioca */
 var playground = document.getElementById("playground"); /* accede al campo da gioco */
 var boxNumber = Number; /* numero di quadrati che verranno generati sul campo di gioco. Dichiarata globalmente perché deve essere accessibile alla funzione probe() e alla funzione associata al click su btnPlay */
-
 var safeBoxes = []; /* qui verranno aggiunti, senza ripetizioni, i numeri contenuti nelle caselle cliccate che non contenevano mine*/
 var gameOver = false; /*stato del gioco in corso. Diventa vera in caso di vittoria o sconfitta. */
+var columns;
 
 function battlefield(num) {
     for (var i = 1; i <= num; i++) {
@@ -51,10 +51,11 @@ btnPlay.addEventListener("click",
         bombs = [];
         safeBoxes = [];
         gameOver = false;
+        playground.classList.remove("col_" + columns);
 
         //raccolgo gli input dell'utente per righe, colonne e difficoltà
         var rows = parseInt(document.getElementById("rows").value);
-        var columns = parseInt(document.getElementById("columns").value);
+        columns = parseInt(document.getElementById("columns").value);
         var difficulty = document.getElementById("difficulty").value;
         
         //valido gli input dell'utente per righe e colonne
@@ -79,6 +80,8 @@ btnPlay.addEventListener("click",
             //aggiungo all'elemento con id "playground" la classe appropriata per il numero di colonne
             playground.classList.add("col_" + columns);
         }
+
+        // return columns; /* rendo il valore di columns disponibile in ambito globale per poter resettare la larghezza del campo da gioco */
     }
 );
 

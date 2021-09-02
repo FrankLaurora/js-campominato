@@ -50,6 +50,7 @@ btnPlay.addEventListener("click",
         playground.innerHTML = "";
         bombs = [];
         safeBoxes = [];
+        gameOver = false;
 
         //raccolgo gli input dell'utente per righe, colonne e difficoltà
         var rows = parseInt(document.getElementById("rows").value);

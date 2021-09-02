@@ -17,3 +17,11 @@
     border: 1px solid #000;
     background-color: #808080;
 }
+
+.square.safe {
+    background-color: #32aa32;
+}
+
+.square.unsafe {
+    background-color: #8b0303;
+}

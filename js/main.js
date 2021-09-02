@@ -1,6 +1,9 @@
-var btnPlay = document.getElementById("play");
-var playground = document.getElementById("playground");
-var boxNumber = Number;
+var btnPlay = document.getElementById("play"); /* accede al tasto gioca */
+var playground = document.getElementById("playground"); /* accede al campo da gioco */
+var boxNumber = Number; /* numero di quadrati che verranno generati sul campo di gioco. Dichiarata globalmente perché deve essere accessibile alla funzione probe() e alla funzione associata al click su btnPlay */
+
+var safeBoxes = []; /* qui verranno aggiunti, senza ripetizioni, i numeri contenuti nelle caselle cliccate che non contenevano mine*/
+var gameOver = false; /*stato del gioco in corso. Diventa vera in caso di vittoria o sconfitta. */
 
 function battlefield(num) {
     for (var i = 1; i <= num; i++) {
@@ -11,7 +14,7 @@ function battlefield(num) {
 //genero 16 numeri casuali tra 1 e 100 e li aggiungo a un array che non può contenere duplicati
 var bombs = [];
 
-function placeBombs(num1, num2)/*num è un numero compreso tra 1 e il numero di caselle del campo minato */ {
+function placeBombs(num1, num2)/* num è un numero compreso tra 1 e il numero di caselle del campo minato */ {
     while(bombs.length <= (num1 * num2)) {
         let bomb = Math.floor(Math.random() * num1) + 1;
         if(!bombs.includes(bomb)) {
@@ -22,18 +25,6 @@ function placeBombs(num1, num2)/*num è un numero compreso tra 1 e il numero di 
     return bombs;
 }
 
-//creo una variabile che a cui assegno il numero della cella cliccata
-var clickedBox = playground.addEventListener("click",
-    function(clicked) {
-        let checkedBoxNum = parseInt(clicked.target.innerHTML);
-        let checkedBox = clicked.target;
-        //con la funzione probe controllo che la casella sia minata o meno
-        probe(bombs, checkedBoxNum, checkedBox);
-    }
-);
-
-var safeBoxes = []; /* qui verranno aggiunti, senza ripetizioni, i numeri contenuti nelle caselle cliccate che non contenevano mine*/
-
 //genero una funzione che verifichi la presenza di checkedBoxNum in bombs e aggiunga checkedBoxNum a safeBoxes se non è presente. Se checkedBoxNum è presente in bombs la funzione genera un alert e restituisce il punteggio (la lunghezza di safeBoxes). Inoltre, cambio il colore alla casella indicata dall'argomento tag.
 function probe(arr, elem, tag) {
     if(!arr.includes(elem)){
@@ -42,11 +33,13 @@ function probe(arr, elem, tag) {
             return safeBoxes.push(elem);
         } else if(!safeBoxes.includes(elem) && safeBoxes.length == (boxNumber - bombs.length - 1)) {
             tag.classList.add("safe");
+            gameOver = true;
             alert("Hai vinto! Hai evitato tutte le mine! Il tuo punteggio è " + (safeBoxes.length + 1) + ".");
             return safeBoxes.push(elem);
         }
     } else {
         tag.classList.add("unsafe");
+        gameOver = true;
         alert("Hai perso! Hai totalizzato " + safeBoxes.length + " punti.");
     }
 }
@@ -87,4 +80,22 @@ btnPlay.addEventListener("click",
         }
     }
 );
+
+//creo una variabile che a cui assegno il numero della cella cliccata
+var clickedBox = playground.addEventListener("click",
+    function(clicked) {
+
+        if(gameOver == false) {
+            let checkedBoxNum = parseInt(clicked.target.innerHTML);
+            let checkedBox = clicked.target;
+            //con la funzione probe controllo che la casella sia minata o meno
+            probe(bombs, checkedBoxNum, checkedBox);
+        } else {
+            return ;
+        }
+    }
+);
+
+
+
 

@@ -8,7 +8,44 @@
 .playground {
     display: flex;
     flex-wrap: wrap;
-    width: 1000px;
+    /* opacity: 0; */
+}
+
+/* playground adapting width */
+.playground.col_2 {
+    width: calc(2 * 100px);
+}
+
+.playground.col_3 {
+    width: calc(3 * 100px);
+}
+
+.playground.col_4 {
+    width: calc(4 * 100px);
+}
+
+.playground.col_5 {
+    width: calc(5 * 100px);
+}
+
+.playground.col_6 {
+    width: calc(6 * 100px);
+}
+
+.playground.col_7 {
+    width: calc(7 * 100px);
+}
+
+.playground.col_8 {
+    width: calc(8 * 100px);
+}
+
+.playground.col_9 {
+    width: calc(9 * 100px);
+}
+
+.playground.col_10 {
+    width: calc(10 * 100px);
 }
 
 .square {

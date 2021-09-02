@@ -1,3 +1,4 @@
+var btnPlay = document.getElementById("play");
 var playground = document.getElementById("playground");
 
 function battlefield(num) {
@@ -9,9 +10,9 @@ function battlefield(num) {
 //genero 16 numeri casuali tra 1 e 100 e li aggiungo a un array che non può contenere duplicati
 var bombs = [];
 
-function placeBombs(num)/*num è un numero compreso tra 1 e il numero di caselle del campo minato */ {
-    while(bombs.length <= 16) {
-        let bomb = Math.floor(Math.random() * num) + 1;
+function placeBombs(num1, num2)/*num è un numero compreso tra 1 e il numero di caselle del campo minato */ {
+    while(bombs.length <= (num1 * num2)) {
+        let bomb = Math.floor(Math.random() * num1) + 1;
         if(!bombs.includes(bomb)) {
             bombs.push(bomb)
         }
@@ -44,5 +45,40 @@ function probe(arr, elem, tag) {
     }
 }
 
-battlefield(50);
-placeBombs(50);
+btnPlay.addEventListener("click", 
+    function(){
+        //svuoto il campo da gioco e resetto gli array di bombe e punteggio
+        playground.innerHTML = "";
+        bombs = [];
+        safeBoxes = [];
+
+        //raccolgo gli input dell'utente per righe, colonne e difficoltà
+        var rows = parseInt(document.getElementById("rows").value);
+        var columns = parseInt(document.getElementById("columns").value);
+        var difficulty = document.getElementById("difficulty").value;
+        
+        //valido gli input dell'utente per righe e colonne
+        if(rows < 2 || rows > 10 || columns < 2 || columns > 10) {
+            return alert("Attenzione! Devi inserire un numero compreso da 2 a 10 per righe e colonne!");
+        } else {
+            //calcolo il numero di caselle moltiplicando righe per colonne
+            var boxNumber = rows * columns;
+
+            //creo il campo di gioco
+            battlefield(boxNumber);
+
+            //genero le bombe
+            if(difficulty == "easy") {
+                placeBombs(boxNumber, 0.16);
+            } else if(difficulty == "regular") {
+                placeBombs(boxNumber, 0.2);
+            } else if(difficulty == "hard") {
+                placeBombs(boxNumber, 0.33);
+            }
+
+            //aggiungo all'elemento con id "playground" la classe appropriata per il numero di colonne
+            playground.classList.add("col_" + columns);
+        }
+    }
+);
+

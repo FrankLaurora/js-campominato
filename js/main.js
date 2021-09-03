@@ -3,7 +3,8 @@ var playground = document.getElementById("playground"); /* accede al campo da gi
 var boxNumber = Number; /* numero di quadrati che verranno generati sul campo di gioco. Dichiarata globalmente perché deve essere accessibile alla funzione probe() e alla funzione associata al click su btnPlay */
 var safeBoxes = []; /* qui verranno aggiunti, senza ripetizioni, i numeri contenuti nelle caselle cliccate che non contenevano mine*/
 var gameOver = false; /*stato del gioco in corso. Diventa vera in caso di vittoria o sconfitta. */
-var columns;
+var columns; /* inizializzo la variabile colonne per rendere disponibile il suo valore quando resetto il campo da gioco */
+var box; /*inizializzo la variabile box per renderla disponibile in ambito globale*/
 
 function battlefield(num) {
     for (var i = 1; i <= num; i++) {
@@ -25,6 +26,16 @@ function placeBombs(num1, num2)/* num è un numero compreso tra 1 e il numero di
     return bombs;
 }
 
+//per gli elementi con indice da 0 al numero di caselle -1 verfico l'innerHTML e se coincide con un elemento dell'array bombs gli attribuisco la classe .unsafe
+function bombsReveal(arr, num, classname) /*gli argomenti che passo alla funzione sono l'array di bombe, il numero totale di caselle e la classe associata alle caselle*/ {
+    for(var i = 0; i < num; i++ ){
+        box = parseInt(document.getElementsByClassName(classname)[i].innerHTML);
+        if(arr.includes(box)){
+            document.getElementsByClassName(classname)[i].classList.add("unsafe");
+        }               
+    }
+} 
+
 //genero una funzione che verifichi la presenza di checkedBoxNum in bombs e aggiunga checkedBoxNum a safeBoxes se non è presente. Se checkedBoxNum è presente in bombs la funzione genera un alert e restituisce il punteggio (la lunghezza di safeBoxes). Inoltre, cambio il colore alla casella indicata dall'argomento tag.
 function probe(arr, elem, tag) {
     if(!arr.includes(elem)){
@@ -35,12 +46,14 @@ function probe(arr, elem, tag) {
             tag.classList.add("safe");
             gameOver = true;
             alert("Hai vinto! Hai evitato tutte le mine! Il tuo punteggio è " + (safeBoxes.length + 1) + ".");
+            bombsReveal(bombs, boxNumber, "square");
             return safeBoxes.push(elem);
         }
     } else {
         tag.classList.add("unsafe");
         gameOver = true;
         alert("Hai perso! Hai totalizzato " + safeBoxes.length + " punti.");
+        bombsReveal(bombs, boxNumber, "square");
     }
 }
 
@@ -80,8 +93,6 @@ btnPlay.addEventListener("click",
             //aggiungo all'elemento con id "playground" la classe appropriata per il numero di colonne
             playground.classList.add("col_" + columns);
         }
-
-        // return columns; /* rendo il valore di columns disponibile in ambito globale per poter resettare la larghezza del campo da gioco */
     }
 );
 
@@ -99,7 +110,3 @@ var clickedBox = playground.addEventListener("click",
         }
     }
 );
-
-
-
-
